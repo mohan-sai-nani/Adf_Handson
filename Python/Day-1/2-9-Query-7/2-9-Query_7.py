@@ -1,0 +1,23 @@
+if __name__ == '__main__':
+    try:
+        print("Enter Name: ")
+        name = input()
+        print("Enter Age: ")
+        age = int(input())
+        print("Enter Gender: ")
+        gender = input()
+        print("Enter Salary: ")
+        salary = int(input())
+        print("Enter State: ")
+        state = input()
+        print("Enter City: ")
+        city = input()
+        print("Given Details are:")
+        print("Name: ", name)
+        print("Age: ", age)
+        print("Gender: ", gender)
+        print("Salary: ", salary)
+        print("State: ", state)
+        print("City: ", city)
+    except():
+        print('An Error Occurred')
