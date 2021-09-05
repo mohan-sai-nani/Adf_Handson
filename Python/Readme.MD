@@ -1,3 +1,3 @@
 #Python Exercises
 
-This folder contains the Pyhton Queries 
+This folder contains the Day-wise Python Queries 
