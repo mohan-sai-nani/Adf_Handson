@@ -60,5 +60,5 @@ if __name__ == '__main__':
         unique_filename += '.txt'
         with open(unique_filename, "x") as f:
             f.write("-".join(li))
-    except():
+    except Exception:
         print("An Error Occured")
