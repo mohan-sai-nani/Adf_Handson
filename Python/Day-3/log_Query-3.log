@@ -81,3 +81,44 @@
 2021-09-08 16:56:52 INFO - Opening file to write
 2021-09-08 16:56:52 INFO - Writting data to File
 2021-09-08 16:56:52 INFO - Execution Completed
+2021-09-09 16:50:24 INFO - Execution Started
+2021-09-09 16:50:43 INFO - Execution Started
+2021-09-09 16:50:43 INFO - Trying to read Input File
+2021-09-09 16:50:43 INFO - spliting words
+2021-09-09 16:50:43 INFO - Split complete
+2021-09-09 16:50:43 INFO - Searching for prefix 'to'
+2021-09-09 16:50:43 INFO - Searching for ending 'ing'
+2021-09-09 16:50:43 INFO - Searching for max repeated element
+2021-09-09 16:50:43 INFO - Searching for palindromes
+2021-09-09 16:50:43 INFO - Returning Unique Elements
+2021-09-09 16:50:43 INFO - Enumeration in dictWithKeys
+2021-09-09 16:50:43 INFO - Spliting at Vovels
+2021-09-09 16:50:43 INFO - Captilizing Third Letter
+2021-09-09 16:50:43 INFO - Captilizing Fifth Word
+2021-09-09 16:50:43 INFO - Replacing NewLine Character
+2021-09-09 16:50:43 INFO - Removing white spaces
+2021-09-09 16:50:43 INFO - Creating unique file name
+2021-09-09 16:50:43 INFO - Calling write_data method
+2021-09-09 16:50:43 INFO - Opening file to write
+2021-09-09 16:50:43 INFO - Writting data to File
+2021-09-09 16:50:43 INFO - Execution Completed
+2021-09-09 16:54:04 INFO - Execution Started
+2021-09-09 16:54:04 INFO - Trying to read Input File
+2021-09-09 16:54:04 INFO - spliting words
+2021-09-09 16:54:04 INFO - Split complete
+2021-09-09 16:54:04 INFO - Searching for prefix 'to'
+2021-09-09 16:54:04 INFO - Searching for ending 'ing'
+2021-09-09 16:54:04 INFO - Searching for max repeated element
+2021-09-09 16:54:04 INFO - Searching for palindromes
+2021-09-09 16:54:04 INFO - Returning Unique Elements
+2021-09-09 16:54:04 INFO - Enumeration in dictWithKeys
+2021-09-09 16:54:04 INFO - Spliting at Vovels
+2021-09-09 16:54:04 INFO - Captilizing Third Letter
+2021-09-09 16:54:04 INFO - Captilizing Fifth Word
+2021-09-09 16:54:04 INFO - Replacing NewLine Character
+2021-09-09 16:54:04 INFO - Removing white spaces
+2021-09-09 16:54:04 INFO - Creating unique file name
+2021-09-09 16:54:04 INFO - Calling write_data method
+2021-09-09 16:54:04 INFO - Opening file to write
+2021-09-09 16:54:04 INFO - Writting data to File
+2021-09-09 16:54:04 INFO - Execution Completed

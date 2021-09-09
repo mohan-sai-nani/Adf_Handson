@@ -71,10 +71,9 @@ class StrOp(Io):
         try:
             logging.info('Searching for max repeated element')
             temp = Counter(self.input_data)
-            return temp.most_common(1)[0][0]
         except():
             logging.error('Unexpected error: %s', sys.exc_info()[0])
-            return None
+        return temp.most_common(1)[0][0]
 
     def find_palin(self):
         """This method finds and returns palindromic words in form of List"""
