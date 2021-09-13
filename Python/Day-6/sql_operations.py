@@ -1,5 +1,7 @@
 """Importing modules"""
 import datetime
+import json
+import logging
 import mysql.connector
 from mysql.connector import errorcode
 import dbconfig as cfg
@@ -10,30 +12,35 @@ class DbConnect:
 
     def __init__(self):
         """Initializes variables and Reads DB Credentials from dbconfig file to config file"""
+        logging.info('Reading credentials')
         self.config = {'host': cfg.mysql["host"],
                        'user': cfg.mysql["user"],
                        'password': cfg.mysql["password"],
                        'database': cfg.mysql["database"]
                        }
-        self.cnx = ''
-        self.mycursor = ''
+        logging.info('Credentials read successful')
+        self.connection = ''
+        self.cursor = ''
 
     def connect(self):
         """Attempts to connect to DB using credentials from dbconfig file"""
         try:
-            self.cnx = mysql.connector.connect(**self.config)
-            self.mycursor = self.cnx.cursor()
+            logging.info('Trying to connect to SQL')
+            self.connection = mysql.connector.connect(**self.config)
+            self.cursor = self.connection.cursor()
+            logging.info('Connection Successful')
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with your user name or password")
+                logging.error("Something is wrong with your user name or password")
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database does not exist")
+                logging.error("Database does not exist")
             else:
-                print(err)
+                logging.error(err)
 
     def disconnect(self):
         """Disconnects to Db"""
-        self.cnx.close()
+        self.connection.close()
+        self.cursor.close()
 
 
 class DbOperations(DbConnect):
@@ -47,11 +54,104 @@ class DbOperations(DbConnect):
 
     def insert_data(self):
         """Inserts data into DB"""
-        sql = "INSERT INTO REQUEST_INFO (FIRST_NAME, MIDDLE_NAME, LAST_NAME, DOB, GENDER, NATIONALITY, CURRENT_CITY, STATE, PIN_CODE, QUALIFICATION, SALARY, PAN_NUMBER) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        first_name, middle_name, last_name, dob, gender, nationality, current_city, state, pin_code, qualification, salary, pan_number = self.userdata
-        values = (first_name, middle_name, last_name, dob, gender, nationality, current_city, state, pin_code, qualification, salary, pan_number)
-        self.mycursor.execute(sql, values)
-        self.cnx.commit()
+        try:
+            logging.info('Attempting to insert data into Db')
+            sql = "INSERT INTO REQUEST_INFO (FIRST_NAME, MIDDLE_NAME, LAST_NAME,DOB, GENDER," \
+                  "NATIONALITY, CURRENT_CITY, STATE, PIN_CODE, QUALIFICATION, SALARY, PAN_NUMBER)"\
+                  "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            values = (self.userdata[0:])
+            self.cursor.execute(sql, values)
+            self.connection.commit()
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                logging.error("Something is wrong with your user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                logging.error("Database does not exist")
+            else:
+                logging.error(err)
+
+    def validate_age(self):
+        """Validates Age"""
+        gender = self.userdata[4]
+        born = self.userdata[3]
+        born = datetime.datetime.strptime(born, '%Y-%m-%d')
+        today = datetime.date.today()
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        if gender == 'M' and age > 21:
+            return True
+        if gender == 'F' and age > 18:
+            return True
+        return False
+
+    def validate_past_requests(self):
+        """This method Checks for past requests"""
+        try:
+            logging.info("Attempting to read data from DB")
+            sql = "SELECT REQUEST_DATE FROM REQUEST_INFO WHERE PAN_NUMBER IN (%s)"
+            val = (self.userdata[-1], )
+            self.cursor.execute(sql, val)
+            db_out = self.cursor.fetchall()
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                logging.error("Something is wrong with your user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                logging.error("Database does not exist")
+            else:
+                logging.error(err)
+        min_age = 6
+        today = datetime.date.today()
+        if len(db_out) > 1:
+            for date in db_out:
+                date = date[0]
+                age = today.year - date.year - ((today.month, date.day) < (date.month, date.day))
+                if age < min_age:
+                    min_age = age
+            return min_age > 5
+        return True
+
+    def validate_nationality(self):
+        """Validates Nationality"""
+        return self.userdata[5] in ('Indian', 'American')
+
+    def validate_state(self):
+        """Validates State"""
+        return self.userdata[7] in ('Andhra Pradesh',
+                                    'Arunachal Pradesh'
+                                    'Assam',
+                                    'Bihar',
+                                    'Chhattisgarh',
+                                    'Karnataka',
+                                    'Madhya Pradesh',
+                                    'Odisha',
+                                    'Tamil Nadu',
+                                    'West Bengal')
+
+    def validate_salary(self):
+        """Validates Salary"""
+        return 10000 <= self.userdata[10] <= 90000
+
+    def validate_data(self):
+        """Performs all the validations"""
+        response = 'Success'
+        reason = ''
+        if not self.validate_age():
+            response = 'Validation Failure'
+            reason = 'Age is less than excepted.'
+        if not self.validate_past_requests():
+            response = 'Validation Failure'
+            reason = 'Recently request received in last 5 days.'
+        if not self.validate_nationality():
+            response = 'Validation Failure'
+            reason = 'Nationality should be Indian or American.'
+        if not self.validate_state():
+            response = 'Validation Failure'
+            reason = 'State not matched.'
+        if not self.validate_salary():
+            response = 'Validation Failure'
+            reason = 'Salary is not in Range'
+        logging.info('Closing Connections')
+        self.disconnect()
+        return reason, response
 
 
 def mandate_inp(text, typ):
@@ -84,7 +184,7 @@ def mandate_inp(text, typ):
     if typ == 4:
         try:
             inp = str(input())
-            while inp not in ('M', 'F', 'm', 'f'):
+            while inp not in ('M', 'F'):
                 print("Input should be (M / F)")
                 print(text)
                 inp = str(input())
@@ -100,9 +200,26 @@ def mandate_inp(text, typ):
     return inp
 
 
+def write_to_json(file, dic):
+    """Writes Data to Json file"""
+    try:
+        logging.info('Attempting to open and write into json file')
+        with open(file, 'w', encoding='utf-8') as json_file:
+            json.dump(dic, json_file)
+    except ValueError:
+        logging.error("Failed to find json file")
+
+
 if __name__ == '__main__':
-    # 1- Str, 2- int, 3- Date, 4- M/F, 5- not mandatory
+    logging.basicConfig(filename='sql_operations.log',
+                        filemode='w',
+                        format='%(asctime)s %(levelname)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S'
+                        )
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
     print("Please provide the following details, fields marked as * are mandatory")
+    # 1- Str, 2- int, 3- Date, 4- M/F, 5- not mandatory
     fields = ["First Name*: ", 1,
               "Middle Name: ", 5,
               "Last Name*: ", 1,
@@ -119,5 +236,13 @@ if __name__ == '__main__':
     data = []
     for i in range(0, len(fields), 2):
         data.append(mandate_inp(fields[i], fields[i+1]))
-    dbobj2 = DbOperations(data)
-    dbobj2.insert_data()
+    dbobj = DbOperations(data)
+    dbobj.insert_data()
+    remarks, result = dbobj.validate_data()
+    out_to_json = ''
+    if result == '':
+        out_to_json = {'Response': result}
+    else:
+        out_to_json = {'Response': result, 'Reason': remarks}
+    write_to_json('sample.json', out_to_json)
+    logging.info('Complete')

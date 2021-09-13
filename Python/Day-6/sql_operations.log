@@ -1,0 +1,8 @@
+2021-09-13 17:30:44 INFO - Reading credentials
+2021-09-13 17:30:44 INFO - Credentials read successful
+2021-09-13 17:30:44 INFO - Trying to connect to SQL
+2021-09-13 17:30:44 INFO - Connection Successful
+2021-09-13 17:30:44 INFO - Attempting to insert data into Db
+2021-09-13 17:30:44 INFO - Attempting to read data from DB
+2021-09-13 17:30:44 INFO - Attempting to open and write into json file
+2021-09-13 17:30:44 INFO - Complete
