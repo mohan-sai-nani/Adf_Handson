@@ -133,7 +133,7 @@ class DbOperations(DbConnect):
     def validate_data(self):
         """Performs all the validations"""
         response = 'Success'
-        reason = ''
+        reason = 'null'
         if not self.validate_age():
             response = 'Validation Failure'
             reason = 'Age is less than excepted.'
@@ -239,8 +239,7 @@ if __name__ == '__main__':
     dbobj = DbOperations(data)
     dbobj.insert_data()
     remarks, result = dbobj.validate_data()
-    out_to_json = ''
-    if result == '':
+    if remarks == 'null':
         out_to_json = {'Response': result}
     else:
         out_to_json = {'Response': result, 'Reason': remarks}
