@@ -158,7 +158,7 @@ class DbOperations(DbConnect):
         reason = 'null'
         if not self.validate_age():
             response = 'Validation Failure'
-            reason = 'Age is less than excepted.'
+            reason = 'Age is less than expected.'
         if not self.validate_past_requests():
             response = 'Validation Failure'
             reason = 'Recently request received in last 5 days.'
