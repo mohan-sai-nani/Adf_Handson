@@ -1,9 +1,9 @@
-2021-09-13 21:29:43 INFO - Reading credentials
-2021-09-13 21:29:43 INFO - Credentials read successful
-2021-09-13 21:29:43 INFO - Trying to connect to SQL
-2021-09-13 21:29:43 INFO - Connection Successful
-2021-09-13 21:29:43 INFO - Attempting to insert data into Db
-2021-09-13 21:29:43 INFO - Attempting to read data from DB
-2021-09-13 21:29:43 INFO - Closing Connections
-2021-09-13 21:29:43 INFO - Attempting to open and write into json file
-2021-09-13 21:29:43 INFO - Complete
+2021-09-14 10:34:17 INFO 15 - Reading credentials
+2021-09-14 10:34:17 INFO 21 - Credentials read successful
+2021-09-14 10:34:17 INFO 28 - Trying to connect to SQL
+2021-09-14 10:34:17 INFO 31 - Connection Successful
+2021-09-14 10:34:17 INFO 59 - Attempting to insert data into Db
+2021-09-14 10:34:17 INFO 112 - Attempting to read data from DB
+2021-09-14 10:34:17 INFO 76 - Attempting to insert data into Db
+2021-09-14 10:34:17 INFO 86 - Closing Connections
+2021-09-14 10:34:17 INFO 270 - Complete

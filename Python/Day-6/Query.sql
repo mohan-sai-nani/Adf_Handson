@@ -14,3 +14,7 @@ create table REQUEST_INFO (
 						   PAN_NUMBER varchar(20) not null,
                            REQUEST_DATE DATETIME not null default NOW()
 						   );
+create table RESPONSE_INFO( EID int AUTO_INCREMENT primary key,
+                            response varchar(100),
+                            response_id int,
+                            foreign key(response_id) references request_info(id));

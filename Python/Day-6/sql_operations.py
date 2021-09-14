@@ -1,6 +1,5 @@
 """Importing modules"""
 import datetime
-import json
 import logging
 import mysql.connector
 from mysql.connector import errorcode
@@ -39,6 +38,7 @@ class DbConnect:
 
     def disconnect(self):
         """Disconnects to Db"""
+        self.connection.commit()
         self.connection.close()
         self.cursor.close()
 
@@ -52,8 +52,8 @@ class DbOperations(DbConnect):
         super().connect()
         self.userdata = inp
 
-    def insert_data(self):
-        """Inserts data into DB"""
+    def insert_into_request_info(self):
+        """Inserts data into Request_Info Table"""
         try:
             logging.info('Attempting to insert data into Db')
             sql = "INSERT INTO REQUEST_INFO (FIRST_NAME, MIDDLE_NAME, LAST_NAME,DOB, GENDER," \
@@ -61,7 +61,29 @@ class DbOperations(DbConnect):
                   "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             values = (self.userdata[0:])
             self.cursor.execute(sql, values)
-            self.connection.commit()
+        except mysql.connector.Error as err:
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                logging.error("Something is wrong with your user name or password")
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                logging.error("Database does not exist")
+            else:
+                logging.error(err)
+
+    def insert_into_response_info(self, response):
+        """Inserts data into Response_Info Table"""
+        try:
+            logging.info('Attempting to insert data into Db')
+            self.cursor.execute("SELECT ID FROM REQUEST_INFO WHERE PAN_NUMBER = %s",
+                                (self.userdata[-1], ))
+            request_id = self.cursor.fetchall()
+            request_id = request_id[0][0]
+            sql = "INSERT INTO RESPONSE_INFO (REQUEST_ID, RESPONSE)"\
+                  "VALUES(%s, %s)"
+            response = "{'Request_id'" + str(request_id) + response
+            values = (request_id, response)
+            self.cursor.execute(sql, values)
+            logging.info('Closing Connections')
+            self.disconnect()
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 logging.error("Something is wrong with your user name or password")
@@ -149,8 +171,6 @@ class DbOperations(DbConnect):
         if not self.validate_salary():
             response = 'Validation Failure'
             reason = 'Salary is not in Range'
-        logging.info('Closing Connections')
-        self.disconnect()
         return reason, response
 
 
@@ -200,20 +220,10 @@ def mandate_inp(text, typ):
     return inp
 
 
-def write_to_json(file, dic):
-    """Writes Data to Json file"""
-    try:
-        logging.info('Attempting to open and write into json file')
-        with open(file, 'w', encoding='utf-8') as json_file:
-            json.dump(dic, json_file)
-    except ValueError:
-        logging.error("Failed to find json file")
-
-
 if __name__ == '__main__':
     logging.basicConfig(filename='sql_operations.log',
                         filemode='w',
-                        format='%(asctime)s %(levelname)s - %(message)s',
+                        format='%(asctime)s %(levelname)s %(lineno)d - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S'
                         )
     logger = logging.getLogger()
@@ -237,11 +247,13 @@ if __name__ == '__main__':
     for i in range(0, len(fields), 2):
         data.append(mandate_inp(fields[i], fields[i+1]))
     dbobj = DbOperations(data)
-    dbobj.insert_data()
+    dbobj.insert_into_request_info()
     remarks, result = dbobj.validate_data()
     if remarks == 'null':
-        out_to_json = {'Response': result}
+        OUT_TO_JSON = ", 'Response':}"
+        OUT_TO_JSON = OUT_TO_JSON[:13] + result + OUT_TO_JSON[13:]
     else:
-        out_to_json = {'Response': result, 'Reason': remarks}
-    write_to_json('sample.json', out_to_json)
+        OUT_TO_JSON = ", 'Response':, 'Reason':"
+        OUT_TO_JSON = OUT_TO_JSON[:13] + result + OUT_TO_JSON[13:] + result + '}'
+    dbobj.insert_into_response_info(OUT_TO_JSON)
     logging.info('Complete')
