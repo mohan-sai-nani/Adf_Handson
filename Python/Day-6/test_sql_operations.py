@@ -10,4 +10,5 @@ import pytest
                          "'Andhra Pradesh', 530045, 'BE', 42000, 'ADF1234'],"
                          "'Success', 'null')"
                          )
-
+def test_input(input_list):
+    pass

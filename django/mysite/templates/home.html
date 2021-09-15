@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Form Validation</h2>
+        <p>Please enter following details:</p>
+        <form action="validate" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="firstname">First Name:</label>
+                <input type="text" class="form-control" id="firstname" placeholder="Enter First name" name="firstname" required>
+            </div>
+            <div class="form-group">
+                <label for="middlename">Middle Name:</label>
+                <input type="text" class="form-control" id="middlename" placeholder="Enter Middle name" name="middlename">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" class="form-control" id="lastname" placeholder="Enter Last name" name="lastname" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" placeholder="Enter your DOB" name="dob" required>
+            </div>
+            Gender:<br>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="gender" value="M" required>Male
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="gender" value="F" required>Female
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="nationality">Nationality:</label>
+                <input type="text" class="form-control" id="nationality" placeholder="Enter Nationality" name="nationality" required>
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" placeholder="Enter current city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" class="form-control" id="state" placeholder="Enter your State" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="pincode">Pincode:</label>
+                <input type="text" class="form-control" id="pincode" placeholder="Enter your pincode" name="pincode" required>
+            </div>
+            <div class="form-group">
+                <label for="qualification">Qualification:</label>
+                <input type="text" class="form-control" id="qualification" placeholder="Enter your qualification" name="qualification" required>
+            </div>
+            <div class="form-group">
+                <label for="salary">Salary:</label>
+                <input type="text" class="form-control" id="salary" placeholder="Enter your salary" name="salary" required>
+            </div>
+            <div class="form-group">
+                <label for="pan">PAN Number:</label>
+                <input type="text" class="form-control" id="pan" placeholder="Enter PAN Number" name="pan" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
