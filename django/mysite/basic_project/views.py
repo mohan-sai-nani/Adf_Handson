@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from .models import RequestInfo, ResponseInfo
 from .validation import UserDataInput
+from .forms import RequestForm
 # Create your views here.
 
 
@@ -57,3 +58,14 @@ class Validate(View):
         res = ResponseInfo(request_id=req_id, response=json_response)
         res.save()
         return HttpResponse(json_response)
+
+
+def Requestform(request):
+    form = RequestForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = RequestForm()
+    context = {
+        'form': form
+    }
+    return render(request, "Request_form.html", context)
