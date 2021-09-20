@@ -20,6 +20,5 @@ class RequestInfo(models.Model):
 
 
 class ReponseInfo(models.Model):
-    request_id = models.ForeignKey(RequestInfo, on_delete=models.CASCADE)
-    response = models.CharField(max_length=50)
-    reason = models.CharField(max_length=50)
+    request_id = models.IntegerField(default=None)
+    response = models.CharField(max_length=500)
