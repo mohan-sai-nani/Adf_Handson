@@ -1,7 +1,8 @@
+"""Adding tables to Admin Page"""
 from django.contrib import admin
+from .models import RequestInfo, ResponseInfo
 
-from .models import RequestInfo, ReponseInfo
 
 admin.site.register(RequestInfo)
-admin.site.register(ReponseInfo)
+admin.site.register(ResponseInfo)
 # Register your models here.

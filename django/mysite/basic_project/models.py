@@ -1,9 +1,11 @@
+"""Defining Table"""
 from django.db import models
 
 # Create your models here.
 
 
 class RequestInfo(models.Model):
+    """Table RequestInfo"""
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50)
@@ -18,7 +20,16 @@ class RequestInfo(models.Model):
     pan_number = models.CharField(max_length=50)
     request_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        """Table name in DB"""
+        db_table = 'RequestInfo'
 
-class ReponseInfo(models.Model):
+
+class ResponseInfo(models.Model):
+    """Table Response Info"""
     request_id = models.IntegerField(default=None)
     response = models.CharField(max_length=500)
+
+    class Meta:
+        """Table name in DB"""
+        db_table = 'ResponseInfo'
