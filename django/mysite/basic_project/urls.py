@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
     path('', views.Validate.as_view()),
-    path('req/', views.Requestform, name='req')
+    path('req/', views.Requestform, name='req'),
 ]

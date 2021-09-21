@@ -61,6 +61,7 @@ class Validate(View):
 
 
 def Requestform(request):
+    """Django Form"""
     form = RequestForm(request.POST or None)
     if form.is_valid():
         form.save()
