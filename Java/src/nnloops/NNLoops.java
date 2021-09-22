@@ -45,8 +45,8 @@ public class NNLoops {
     void infLoop() {
         System.out.println("Inf_loop");
         Scanner sc = new Scanner(System.in);
-        String inp = null;
-        /*while (true){
+        /*String inp = null;
+        while (true){
             System.out.println("\"Are we there yet?\"");
             inp = sc.nextLine();
             if (inp.equals("Yes")) {
