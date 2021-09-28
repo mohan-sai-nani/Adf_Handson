@@ -47,6 +47,7 @@ public class NNArray {
         System.out.println(s);
     }
 
+
     NNArray(){
         String[] breakfast = {"Sausage", "Eggs", "Beans", "Bacon", "Tomatoes", "Mushrooms"};
         String[] palindromic = {"Sausage", "Eggs", "Beans", "Beans", "Eggs", "Sausage"};
